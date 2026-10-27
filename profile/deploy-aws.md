@@ -6,13 +6,13 @@
 3. 自分の名前のアカウント → `LabDeveloper` を押下
 4. 右上のリージョンを Asia Pacific (Osaka) にする
 
-## 2. 自分の DNS ゾーンを作成
+## 2. 自分の DNS ゾーンを作成 ([一般的な手順の 1](https://github.com/gakushu-lab/.github/blob/main/profile/README.md#アプリのデプロイ手順))
 1. Route 53 → Hosted zones → Create hosted zone を押下
 2. Domain name に `<任意>.gakushu.now`、Type は Public hosted zone → Create hosted zone を押下
 3. NS レコードの値4つを gakushu.now の管理者に送る
 4. 管理者が追加するまで `<任意>.gakushu.now` 配下の URL はブラウザで開けない
 
-## 3. Web Function を作成
+## 3. Web Function を作成 ([一般的な手順の 3](https://github.com/gakushu-lab/.github/blob/main/profile/README.md#アプリのデプロイ手順))
 1. Lambda → Web Functions → Create Web Function を押下
 2. Function name に任意の名前、Code source は Hello World template
 3. Endpoint name に任意の名前、Type は Home-Region
@@ -21,7 +21,7 @@
 6. Create Web Function を押下
 7. Endpoints → 3 のエンドポイント → ドメイン名を控える
 
-## 4. CloudFront を作成
+## 4. CloudFront を作成 ([一般的な手順の 5](https://github.com/gakushu-lab/.github/blob/main/profile/README.md#アプリのデプロイ手順))
 1. CloudFront → Distributions → Create distribution を押下
 2. Flat-rate plan → Free を選ぶ
 3. Distribution name に任意の名前 → Single website or app → Next
@@ -32,7 +32,7 @@
 8. Enable security は Use monitor mode を付けずに Next
 9. Create distribution を押下
 
-## 5. URL を付ける
+## 5. URL を付ける ([一般的な手順の 6 と 7](https://github.com/gakushu-lab/.github/blob/main/profile/README.md#アプリのデプロイ手順))
 1. 4 の distribution → Settings → Alternate domain names → Add a domain を押下
 2. `<アプリ名>.<任意>.gakushu.now` → Next
 3. Create a wildcard certificate は付けずに Create certificate → Next → Add domains を押下
