@@ -1,0 +1,145 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Parameters:
+  GitHubOrgName:
+    Type: String
+    Default: gakushu-lab
+  GitHubOrgId:
+    Type: String
+    Default: "348093636"
+  GitHubActorId:
+    Type: String
+    Default: "0"
+Resources:
+  GitHubOidcProvider:
+    Type: AWS::IAM::OIDCProvider
+    Properties:
+      Url: https://token.actions.githubusercontent.com
+      ClientIdList:
+        - sts.amazonaws.com
+  LabLambdaExec:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: LabLambdaExec
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/PowerUserAccess
+  LabSchedulerExec:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: LabSchedulerExec
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: scheduler.amazonaws.com
+            Action: sts:AssumeRole
+            Condition:
+              StringEquals:
+                aws:SourceAccount:
+                  Ref: AWS::AccountId
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/PowerUserAccess
+  LabStatesExec:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: LabStatesExec
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: states.amazonaws.com
+            Action: sts:AssumeRole
+            Condition:
+              StringEquals:
+                aws:SourceAccount:
+                  Ref: AWS::AccountId
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/PowerUserAccess
+  LabEventsExec:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: LabEventsExec
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: events.amazonaws.com
+            Action: sts:AssumeRole
+            Condition:
+              StringEquals:
+                aws:SourceAccount:
+                  Ref: AWS::AccountId
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/PowerUserAccess
+  LabGitHubDeploy:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: LabGitHubDeploy
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Federated:
+                Ref: GitHubOidcProvider
+            Action: sts:AssumeRoleWithWebIdentity
+            Condition:
+              StringEquals:
+                token.actions.githubusercontent.com:aud: sts.amazonaws.com
+                token.actions.githubusercontent.com:repository_owner_id:
+                  Ref: GitHubOrgId
+                token.actions.githubusercontent.com:actor_id:
+                  Ref: GitHubActorId
+              StringLike:
+                token.actions.githubusercontent.com:sub:
+                  - Fn::Sub: repo:${GitHubOrgName}@${GitHubOrgId}/*
+                  - Fn::Sub: repo:${GitHubOrgName}/*
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/PowerUserAccess
+      Policies:
+        - PolicyName: ReadIamAndPassRole
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - iam:Get*
+                  - iam:List*
+                Resource: "*"
+              - Effect: Allow
+                Action: iam:PassRole
+                Resource:
+                  Fn::Sub: arn:aws:iam::${AWS::AccountId}:role/LabLambdaExec
+                Condition:
+                  StringEquals:
+                    iam:PassedToService: lambda.amazonaws.com
+              - Effect: Allow
+                Action: iam:PassRole
+                Resource:
+                  Fn::Sub: arn:aws:iam::${AWS::AccountId}:role/LabSchedulerExec
+                Condition:
+                  StringEquals:
+                    iam:PassedToService: scheduler.amazonaws.com
+              - Effect: Allow
+                Action: iam:PassRole
+                Resource:
+                  Fn::Sub: arn:aws:iam::${AWS::AccountId}:role/LabStatesExec
+                Condition:
+                  StringEquals:
+                    iam:PassedToService: states.amazonaws.com
+              - Effect: Allow
+                Action: iam:PassRole
+                Resource:
+                  Fn::Sub: arn:aws:iam::${AWS::AccountId}:role/LabEventsExec
+                Condition:
+                  StringEquals:
+                    iam:PassedToService: events.amazonaws.com

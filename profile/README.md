@@ -1,8 +1,10 @@
 # gakushu-lab
 
-![gakushu-lab の構成](architecture.svg)
+![gakushu-lab の構成](diagrams/architecture.svg)
 
-図の元ファイルは [architecture.drawio](architecture.drawio)。
+図の元ファイルは [architecture.drawio](https://github.com/gakushu-lab/.github/blob/main/profile/diagrams/architecture.drawio)。
+
+詳細な gakushu-lab の構成は[こちら](https://github.com/gakushu-lab/.github/blob/main/profile/gakushu-lab.md)。
 
 ## アプリのデプロイ手順
 

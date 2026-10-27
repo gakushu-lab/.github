@@ -1,0 +1,69 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "DenyUnlistedServices",
+      "Effect": "Deny",
+      "NotAction": [
+        "s3:*",
+        "cloudfront:*",
+        "wafv2:*",
+        "pricingplanmanager:*",
+        "acm:*",
+        "kms:*",
+        "route53:*",
+        "lambda:*",
+        "dynamodb:*",
+        "apigateway:*",
+        "execute-api:*",
+        "cognito-idp:*",
+        "cognito-identity:*",
+        "ses:*",
+        "sqs:*",
+        "sns:*",
+        "events:*",
+        "scheduler:*",
+        "states:*",
+        "ssm:*",
+        "xray:*",
+        "logs:*",
+        "cloudwatch:*",
+        "iam:*",
+        "sts:*",
+        "cloudshell:*",
+        "budgets:*",
+        "ce:*",
+        "billing:*",
+        "freetier:*",
+        "account:*",
+        "support:*",
+        "health:*",
+        "tag:*",
+        "resource-groups:*"
+      ],
+      "Resource": "*",
+      "Condition": {
+        "ArnNotLike": {
+          "aws:PrincipalArn": [
+            "arn:aws:iam::*:role/OrganizationAccountAccessRole",
+            "arn:aws:iam::*:role/stacksets-exec-*"
+          ]
+        }
+      }
+    },
+    {
+      "Sid": "DenyAlwaysOnCharges",
+      "Effect": "Deny",
+      "Action": [
+        "lambda:PutProvisionedConcurrencyConfig",
+        "lambda:CreateCapacityProvider",
+        "pricingplanmanager:ApprovePaidSubscription",
+        "pricingplanmanager:UpdateSubscription",
+        "kms:CreateKey",
+        "kms:ReplicateKey",
+        "kms:CreateCustomKeyStore"
+      ],
+      "Resource": "*"
+    }
+  ]
+}
