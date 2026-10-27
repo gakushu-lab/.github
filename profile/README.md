@@ -21,8 +21,12 @@
 ## 制約
 
 - リージョンは大阪 (ap-northeast-3)。CloudFront の証明書と AWS WAF だけ us-east-1
-- IAM ロールは作れない。Lambda は `LabLambdaExec`、GitHub Actions は `LabGitHubDeploy` を使う
-- 実行ロールが要るサービス (EventBridge Scheduler など) は使えない
+- IAM ロールは作れない。用意済みの次のロールを使う
+  - Lambda: `LabLambdaExec`
+  - EventBridge Scheduler: `LabSchedulerExec`
+  - Step Functions: `LabStatesExec`
+  - EventBridge のルール: `LabEventsExec`
+  - GitHub Actions: `LabGitHubDeploy`
 - API サーバーは環境変数 `AWS_LAMBDA_HTTP_ENDPOINT` (host:port) で待ち受ける
 - アクセスキーは使わない
 - `LabGitHubDeploy` は gakushu-lab のリポジトリで本人が起こした実行だけを受け付ける
