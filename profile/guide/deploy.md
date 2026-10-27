@@ -1,4 +1,4 @@
-# AWS 上でのデプロイ手順
+# gakushu-lab でのデプロイ手順
 
 ## 1. ログイン
 1. https://d-c7677a6954.awsapps.com/start を開く
