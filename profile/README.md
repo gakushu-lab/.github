@@ -14,6 +14,10 @@
 6. DNS の A レコードにリバースプロキシの IP アドレスを登録する (Route 53)
 7. 認証局に TLS 証明書を発行してもらいリバースプロキシに設定する (ACM, CloudFront)
 
+### AWS 上でのやり方
+
+[こちら](https://github.com/gakushu-lab/.github/blob/main/profile/deploy-aws.md)を参照
+
 ## 制約
 
 - リージョンは大阪 (ap-northeast-3)。CloudFront の証明書と AWS WAF だけ us-east-1
