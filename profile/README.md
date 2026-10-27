@@ -24,7 +24,7 @@
 
 - リージョンは大阪 (ap-northeast-3)。CloudFront の証明書と AWS WAF だけ us-east-1
 - IAM ロールは作れない。用意済みの次のロールを使う
-  - Lambda: `LabLambdaExec`
+  - Lambda: `LabLambdaExec`。Lambda から EventBridge Scheduler の予約を作るときは `LabSchedulerExec` を渡せる
   - EventBridge Scheduler: `LabSchedulerExec`
   - Step Functions: `LabStatesExec`
   - EventBridge のルール: `LabEventsExec`

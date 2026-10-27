@@ -29,6 +29,18 @@ Resources:
             Action: sts:AssumeRole
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/PowerUserAccess
+      Policies:
+        - PolicyName: PassSchedulerRole
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action: iam:PassRole
+                Resource:
+                  Fn::Sub: arn:aws:iam::${AWS::AccountId}:role/LabSchedulerExec
+                Condition:
+                  StringEquals:
+                    iam:PassedToService: scheduler.amazonaws.com
   LabSchedulerExec:
     Type: AWS::IAM::Role
     Properties:
