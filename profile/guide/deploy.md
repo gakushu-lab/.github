@@ -1,16 +1,16 @@
 # gakushu-lab でのデプロイ手順
 
+HTML などの静的ファイルだけを置く場合は、3、4、6-10 〜 6-13 を飛ばす。
+
 ## 1. ログイン
 1. https://d-c7677a6954.awsapps.com/start を開く
 2. ユーザー名とパスワードでログイン
 3. 自分の名前のアカウント → `LabDeveloper` を押下
 4. 右上のリージョンを Asia Pacific (Osaka) にする
 
-## 2. 自分の DNS ゾーンを作成 ([1](https://github.com/gakushu-lab/.github/blob/main/profile/README.md#アプリのデプロイ手順))
-1. Route 53 → Hosted zones → Create hosted zone を押下
-2. Domain name に `<任意>.gakushu.now`、Type は Public hosted zone → Create hosted zone を押下
-3. NS レコードの値4つを gakushu.now の管理者に送る
-4. 管理者が追加するまで `<任意>.gakushu.now` 配下の URL はブラウザで開けない
+## 2. 自分の DNS ゾーンを確認 ([1](https://github.com/gakushu-lab/.github/blob/main/profile/README.md#アプリのデプロイ手順))
+1. Route 53 → Hosted zones を開く
+2. `<ユーザー名>.gakushu.now` があることを確認する。管理者が作成済みで、レジストラへの登録と gakushu.now からの NS レコードも登録済み
 
 ## 3. DynamoDB のテーブルを作成 ([2](https://github.com/gakushu-lab/.github/blob/main/profile/README.md#アプリのデプロイ手順))
 1. DynamoDB → Tables → Create table を押下
@@ -49,6 +49,7 @@
 
 ## 7. URL を付ける ([6 と 7](https://github.com/gakushu-lab/.github/blob/main/profile/README.md#アプリのデプロイ手順))
 1. 6 の distribution → Settings → Alternate domain names → Add a domain を押下
-2. `<アプリ名>.<任意>.gakushu.now` → Next
+2. `<アプリ名>.<ユーザー名>.gakushu.now` → Next
 3. Create a wildcard certificate は付けずに Create certificate → Next → Add domains を押下
 4. Settings → Route domains to CloudFront → 自動で設定する。ダイアログは何も表示せずに閉じるが、それで設定できている
+5. 6 の distribution → Manage plan → Route 53 DNS の Attach → Select a hosted zone で `<ユーザー名>.gakushu.now` を選ぶ → Attach を押下。ホストゾーンの月額料金が無料プランに含まれる
