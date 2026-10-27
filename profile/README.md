@@ -16,13 +16,20 @@
 6. DNS の A レコードにリバースプロキシの IP アドレスを登録する (Route 53)
 7. 認証局に TLS 証明書を発行してもらいリバースプロキシに設定する (ACM, CloudFront)
 
-### AWS 上でのやり方
+### gakushu-lab でのやり方
 
 [こちら](https://github.com/gakushu-lab/.github/blob/main/profile/guide/deploy.md)を参照
 
 ## DevOps
 
 上記でデプロイ手順について記述したが、開発、デプロイ、本番での課題発見を繋げることで、効率よく安全に機能を増やしたり変更しようという考え方を [DevOps](https://aws.amazon.com/devops/what-is-devops/) という。
+
+```mermaid
+flowchart LR
+  dev(("開発")) --> deploy(("デプロイ"))
+  deploy --> find(("課題発見"))
+  find --> dev
+```
 
 主なものは次の4つ
 
