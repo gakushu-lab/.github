@@ -6,29 +6,20 @@
 
 ## アプリのデプロイ手順
 
-1. gakushu-lab にリポジトリを作る
-2. `aws sso login` で自分の AWS アカウントに入る
-3. アプリを HTTP サーバーとして書く。待ち受け先は環境変数 `AWS_LAMBDA_HTTP_ENDPOINT` (host:port)
-4. Lambda Web Function に配置する
-   ```sh
-   aws lambda-web deploy --name <名前> --code <ディレクトリ> --create \
-     --execution-role-arn arn:aws:iam::<アカウント ID>:role/LabLambdaExec
-   ```
-5. 独自ドメインを付けるなら、CloudFront (Free プラン) を前に置き、自分のホストゾーンにレコードを作る
-6. 自動デプロイは GitHub Actions で `LabGitHubDeploy` を引き受ける
-   ```yaml
-   permissions:
-     id-token: write
-   # aws-actions/configure-aws-credentials の with:
-   role-to-assume: arn:aws:iam::<アカウント ID>:role/LabGitHubDeploy
-   aws-region: ap-northeast-3
-   ```
+1. ドメインを取得する (Route 53)
+2. データベースを作る (DynamoDB)
+3. API サーバーをデプロイしてデータベースに接続させる (Lambda Web Function)
+4. フロントエンドの静的ファイルをホスティングする (S3)
+5. リバースプロキシで `/api/*` だけを API サーバーに転送する (CloudFront)
+6. DNS の A レコードにリバースプロキシの IP アドレスを登録する (Route 53)
+7. 認証局に TLS 証明書を発行してもらいリバースプロキシに設定する (ACM, CloudFront)
 
 ## 制約
 
 - リージョンは大阪 (ap-northeast-3)。CloudFront の証明書と AWS WAF だけ us-east-1
 - IAM ロールは作れない。Lambda は `LabLambdaExec`、GitHub Actions は `LabGitHubDeploy` を使う
 - 実行ロールが要るサービス (EventBridge Scheduler など) は使えない
+- API サーバーは環境変数 `AWS_LAMBDA_HTTP_ENDPOINT` (host:port) で待ち受ける
 - アクセスキーは使わない
 - `LabGitHubDeploy` は gakushu-lab のリポジトリで本人が起こした実行だけを受け付ける
 - 1人 月 3 USD まで。超えると翌月1日まで AWS の操作が止まる。動いているアプリは止まらない
