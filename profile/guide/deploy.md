@@ -1,6 +1,6 @@
 # gakushu-lab でのデプロイ手順
 
-HTML などの静的ファイルだけを置く場合は、3、4、6-10 〜 6-13 を飛ばす。
+HTML などの静的ファイルだけを置く場合は、3、4、6-11 〜 6-14 を飛ばす。
 
 ## 1. ログイン
 1. https://d-c7677a6954.awsapps.com/start を開く
@@ -32,24 +32,21 @@ HTML などの静的ファイルだけを置く場合は、3、4、6-10 〜 6-13
 2. Bucket name に任意の名前を入力し、ほかは既定のまま Create bucket を押下
 3. 作ったバケット → Upload → Add file または Add folder で HTML、CSS、JS を選ぶ → Upload を押下
 
-## 6. CloudFront を作成 ([5](https://github.com/gakushu-lab/.github/blob/main/profile/README.md#アプリのデプロイ手順))
+## 6. CloudFront を作成 ([5 と 7](https://github.com/gakushu-lab/.github/blob/main/profile/README.md#アプリのデプロイ手順))
 1. CloudFront → Distributions → Create distribution を押下
 2. Flat-rate plan → Free を選ぶ
-3. Distribution name に任意の名前 → Single website or app → Next
-4. Domain setup は空のまま Next
+3. Distribution name に任意の名前、Distribution type は Single website configuration
+4. Route 53 managed domain に `<ユーザー名>.gakushu.now` → Check domain → Add a subdomain → `<アプリ名>` を入力 → Next。`<ユーザー名>.gakushu.now` 自体も配信先に含まれ、外せない
 5. Origin type は Amazon S3 → S3 origin の Browse S3 で 5 のバケットを選ぶ
 6. Settings は Use recommended origin settings のまま Next
 7. Enable security は Use monitor mode を付けずに Next
-8. Create distribution を押下
-9. Settings → General → Edit → Default root object に `index.html` → Save changes
-10. Origins → Create origin → Origin domain に 4-8 のドメイン名、Protocol は HTTPS only → Create origin
-11. Behaviors → Create behavior → Path pattern に `/api/*`、Origin or origin group に 6-10 の origin
-12. Viewer protocol policy は Redirect HTTP to HTTPS、Allowed HTTP methods は GET, HEAD, OPTIONS, PUT, POST, PATCH, DELETE
-13. Cache policy は `CachingDisabled`、Origin request policy は `AllViewerExceptHostHeader` → Create behavior
+8. TLS certificate は Create a wildcard certificate を付けずに Create certificate → Next
+9. Create distribution を押下。ホストゾーンは自動で無料プランに含まれ、Manage plan の Route 53 DNS に表示される
+10. Settings → General → Edit → Default root object に `index.html` → Save changes
+11. Origins → Create origin → Origin domain に 4-8 のドメイン名、Protocol は HTTPS only → Create origin
+12. Behaviors → Create behavior → Path pattern に `/api/*`、Origin or origin group に 6-11 の origin
+13. Viewer protocol policy は Redirect HTTP to HTTPS、Allowed HTTP methods は GET, HEAD, OPTIONS, PUT, POST, PATCH, DELETE
+14. Cache policy は `CachingDisabled`、Origin request policy は `AllViewerExceptHostHeader` → Create behavior
 
-## 7. URL を付ける ([6 と 7](https://github.com/gakushu-lab/.github/blob/main/profile/README.md#アプリのデプロイ手順))
-1. 6 の distribution → Settings → Alternate domain names → Add a domain を押下
-2. `<アプリ名>.<ユーザー名>.gakushu.now` → Next
-3. Create a wildcard certificate は付けずに Create certificate → Next → Add domains を押下
-4. Settings → Route domains to CloudFront → 自動で設定する。ダイアログは何も表示せずに閉じるが、それで設定できている
-5. 6 の distribution → Manage plan → Route 53 DNS の Attach → Select a hosted zone で `<ユーザー名>.gakushu.now` を選ぶ → Attach を押下。ホストゾーンの月額料金が無料プランに含まれる
+## 7. URL を付ける ([6](https://github.com/gakushu-lab/.github/blob/main/profile/README.md#アプリのデプロイ手順))
+1. 6 の distribution → Settings → Route domains to CloudFront → 自動で設定する。ダイアログは何も表示せずに閉じるが、それで設定できている
