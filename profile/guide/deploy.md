@@ -31,6 +31,7 @@ HTML などの静的ファイルだけを置く場合は、3、4、6-11 〜 6-14
 1. S3 → General purpose buckets → Create bucket を押下
 2. Bucket name に任意の名前を入力し、ほかは既定のまま Create bucket を押下
 3. 作ったバケット → Upload → Add file または Add folder で HTML、CSS、JS を選ぶ → Upload を押下
+4. 6 のあとにファイルを上書きしたら、6 の distribution → Invalidations → Create invalidation → `/*` を入力 → Create invalidation を押下。押さないと最長24時間、古い内容が表示される
 
 ## 6. CloudFront を作成 ([5 と 7](https://github.com/gakushu-lab/.github/blob/main/profile/README.md#アプリのデプロイ手順))
 1. CloudFront → Distributions → Create distribution を押下
