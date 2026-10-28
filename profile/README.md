@@ -40,11 +40,13 @@ flowchart LR
   find -- 課題を報告 --> dev
 ```
 
+DevOps では次のようになる。
+
 ```mermaid
 flowchart LR
-  dev(("開発")) --> deploy(("デプロイ"))
+  dev(("開発")) -- 自動 --> deploy(("デプロイ"))
   deploy --> find(("課題発見"))
-  find --> dev
+  find -- 自動 --> dev
 ```
 
 主なものは次の4つ
