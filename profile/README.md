@@ -24,6 +24,22 @@
 
 上記でデプロイ手順について記述したが、開発、デプロイ、本番での課題発見を繋げることで、効率よく安全に機能を増やしたり変更しようという考え方を [DevOps](https://aws.amazon.com/devops/what-is-devops/) という。
 
+DevOps 以前は、開発チームと運用チームが分かれていて、チームをまたぐたびに引き継ぎが必要だった。
+
+```mermaid
+flowchart LR
+  subgraph devteam["開発チーム"]
+    dev(("開発"))
+  end
+  subgraph opsteam["運用チーム"]
+    deploy(("デプロイ"))
+    find(("課題発見"))
+  end
+  dev -- "成果物と<br>デプロイ手順を渡す" --> deploy
+  deploy --> find
+  find -- 課題を報告 --> dev
+```
+
 ```mermaid
 flowchart LR
   dev(("開発")) --> deploy(("デプロイ"))
